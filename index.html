@@ -6,15 +6,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="noindex, nofollow">
   <title>Daily Routine</title>
+  <script>
+    (function () {
+      var saved = localStorage.getItem('theme');
+      var theme = (saved === 'light' || saved === 'dark')
+        ? saved
+        : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-page: #f5f5f7;
-      --card-bg: #ffffff;
-      --border: #e4e4e7;
-      --grid-line: #ececef;
+      --bg-grad-1: #fdfaf0;
+      --bg-grad-2: #faf4e2;
+      --bg-page: #fcf8ea;
+      --card-bg: rgba(255, 254, 245, 0.5);
+      --hour-bg: rgba(255, 254, 245, 0.75);
+      --border: rgba(255, 255, 255, 0.55);
+      --grid-line: rgba(60, 50, 20, 0.08);
+      --shadow-soft: 0 1px 2px rgba(60, 50, 20, 0.04), 0 8px 24px rgba(60, 50, 20, 0.06);
+      --shadow-modal: 0 20px 60px rgba(60, 50, 20, 0.2), 0 2px 6px rgba(60, 50, 20, 0.1);
       --text-main: #18181b;
       --text-muted: #6b7280;
       --accent-blue: #2563eb;
@@ -37,6 +51,34 @@
       --neutral-bg: #f3f4f6;
       --neutral-bd: #9ca3af;
       --neutral-fg: #4b5563;
+
+      --toggle-active-bg: #3f3f46;
+      --toggle-active-fg: #ffffff;
+    }
+
+    :root[data-theme="dark"] {
+      --bg-grad-1: #0d1729;
+      --bg-grad-2: #18243f;
+      --bg-page: #0f1a2e;
+      --card-bg: rgba(255, 255, 255, 0.06);
+      --hour-bg: rgba(15, 26, 46, 0.7);
+      --border: rgba(255, 255, 255, 0.1);
+      --grid-line: rgba(255, 255, 255, 0.07);
+      --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+      --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.4);
+      --text-main: #fafafa;
+      --text-muted: #9ca3af;
+      --accent-blue: #3b82f6;
+
+      --workout-bg: #3a2e10; --workout-bd: #d97706; --workout-fg: #fcd34d;
+      --meal-bg:    #0f2e22; --meal-bd:    #059669; --meal-fg:    #6ee7b7;
+      --fast-bg:    #3a1414; --fast-bd:    #dc2626; --fast-fg:    #fca5a5;
+      --supp-bg:    #2a1f4a; --supp-bd:    #7c3aed; --supp-fg:    #c4b5fd;
+      --dessert-bg: #3a1428; --dessert-bd: #db2777; --dessert-fg: #f9a8d4;
+      --neutral-bg: #27272c; --neutral-bd: #6b7280; --neutral-fg: #d1d5db;
+
+      --toggle-active-bg: #e4e4e7;
+      --toggle-active-fg: #18181b;
     }
 
     * {
@@ -48,10 +90,12 @@
     }
 
     body {
+      background: linear-gradient(155deg, var(--bg-grad-1), var(--bg-grad-2)) fixed;
       background-color: var(--bg-page);
       color: var(--text-main);
       padding: 8px 10px 12px;
       font-weight: 300;
+      min-height: 100vh;
     }
 
     header {
@@ -77,12 +121,15 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       background-color: var(--card-bg);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      backdrop-filter: blur(20px) saturate(180%);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 10px;
       overflow: hidden;
       cursor: pointer;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
+      box-shadow: var(--shadow-soft);
     }
 
     .toggle-option {
@@ -98,9 +145,38 @@
     }
 
     .toggle-option.active {
-      background-color: var(--accent-blue);
-      color: #ffffff;
+      background-color: var(--toggle-active-bg);
+      color: var(--toggle-active-fg);
     }
+
+    .theme-toggle {
+      position: fixed;
+      top: 10px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--card-bg);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0;
+      z-index: 50;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: var(--shadow-soft);
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+    .theme-toggle:hover { color: var(--text-main); }
+    .theme-toggle svg { width: 16px; height: 16px; }
+    .theme-toggle .icon-sun  { display: none; }
+    .theme-toggle .icon-moon { display: block; }
+    :root[data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
+    :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
 
     .toggle-emoji {
       font-size: 1rem;
@@ -111,10 +187,12 @@
     .calendar {
       position: relative;
       background-color: var(--card-bg);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      backdrop-filter: blur(24px) saturate(180%);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 14px;
       padding: 8px 8px 8px 8px;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      box-shadow: var(--shadow-soft);
     }
 
     .timeline {
@@ -139,7 +217,6 @@
       color: var(--text-muted);
       padding-right: 4px;
       transform: translateY(-50%);
-      background: var(--card-bg);
       letter-spacing: 0.2px;
     }
 
@@ -225,7 +302,9 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.25);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -237,11 +316,14 @@
 
     .modal {
       background: var(--card-bg);
-      border-radius: 10px;
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      backdrop-filter: blur(30px) saturate(180%);
+      border: 1px solid var(--border);
+      border-radius: 14px;
       padding: 14px 14px 12px;
       width: 100%;
       max-width: 360px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      box-shadow: var(--shadow-modal);
     }
 
     .modal-time {
@@ -303,6 +385,11 @@
 </head>
 
 <body>
+
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+  </button>
 
   <header>
     <h1>Daily Routine</h1>
@@ -562,6 +649,15 @@
     });
 
     render();
+
+    (function () {
+      var root = document.documentElement;
+      document.getElementById('theme-toggle').addEventListener('click', function () {
+        var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+      });
+    })();
   </script>
 </body>
 
