@@ -20,11 +20,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-grad-1: #fdfaf0;
-      --bg-grad-2: #faf4e2;
-      --bg-page: #fcf8ea;
-      --card-bg: rgba(255, 254, 245, 0.5);
-      --hour-bg: rgba(255, 254, 245, 0.75);
+      --bg-grad-1: #fefdf6;
+      --bg-grad-2: #fdfbf0;
+      --bg-page: #fdfcf4;
+      --card-bg: rgba(255, 255, 251, 0.5);
+      --hour-bg: rgba(255, 255, 251, 0.75);
       --border: rgba(255, 255, 255, 0.55);
       --grid-line: rgba(60, 50, 20, 0.08);
       --shadow-soft: 0 1px 2px rgba(60, 50, 20, 0.04), 0 8px 24px rgba(60, 50, 20, 0.06);
@@ -33,7 +33,7 @@
       --text-muted: #6b7280;
       --accent-blue: #2563eb;
 
-      --workout-bg: #fef3c7;
+      --workout-bg: #fffdef;
       --workout-bd: #f59e0b;
       --workout-fg: #92400e;
       --meal-bg: #d1fae5;
@@ -70,12 +70,24 @@
       --text-muted: #9ca3af;
       --accent-blue: #3b82f6;
 
-      --workout-bg: #3a2e10; --workout-bd: #d97706; --workout-fg: #fcd34d;
-      --meal-bg:    #0f2e22; --meal-bd:    #059669; --meal-fg:    #6ee7b7;
-      --fast-bg:    #3a1414; --fast-bd:    #dc2626; --fast-fg:    #fca5a5;
-      --supp-bg:    #2a1f4a; --supp-bd:    #7c3aed; --supp-fg:    #c4b5fd;
-      --dessert-bg: #3a1428; --dessert-bd: #db2777; --dessert-fg: #f9a8d4;
-      --neutral-bg: #27272c; --neutral-bd: #6b7280; --neutral-fg: #d1d5db;
+      --workout-bg: #3a2e10;
+      --workout-bd: #d97706;
+      --workout-fg: #fcd34d;
+      --meal-bg: #0f2e22;
+      --meal-bd: #059669;
+      --meal-fg: #6ee7b7;
+      --fast-bg: #3a1414;
+      --fast-bd: #dc2626;
+      --fast-fg: #fca5a5;
+      --supp-bg: #2a1f4a;
+      --supp-bd: #7c3aed;
+      --supp-fg: #c4b5fd;
+      --dessert-bg: #3a1428;
+      --dessert-bd: #db2777;
+      --dessert-fg: #f9a8d4;
+      --neutral-bg: #27272c;
+      --neutral-bd: #6b7280;
+      --neutral-fg: #d1d5db;
 
       --toggle-active-bg: #e4e4e7;
       --toggle-active-fg: #18181b;
@@ -110,16 +122,10 @@
       letter-spacing: -0.3px;
     }
 
-    .toggles {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin: 6px 0 18px;
-    }
-
     .toggle {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
+      margin: 6px 0 18px;
       background-color: var(--card-bg);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
       backdrop-filter: blur(20px) saturate(180%);
@@ -171,12 +177,31 @@
       box-shadow: var(--shadow-soft);
       transition: color 0.15s ease, background-color 0.15s ease;
     }
-    .theme-toggle:hover { color: var(--text-main); }
-    .theme-toggle svg { width: 16px; height: 16px; }
-    .theme-toggle .icon-sun  { display: none; }
-    .theme-toggle .icon-moon { display: block; }
-    :root[data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
-    :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+    .theme-toggle:hover {
+      color: var(--text-main);
+    }
+
+    .theme-toggle svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .theme-toggle .icon-sun {
+      display: none;
+    }
+
+    .theme-toggle .icon-moon {
+      display: block;
+    }
+
+    :root[data-theme="dark"] .theme-toggle .icon-sun {
+      display: block;
+    }
+
+    :root[data-theme="dark"] .theme-toggle .icon-moon {
+      display: none;
+    }
 
     .toggle-emoji {
       font-size: 1rem;
@@ -242,11 +267,35 @@
       box-shadow: 0 1px 1px rgba(0, 0, 0, 0.03);
     }
 
-    .event.type-workout { background-color: var(--workout-bg); border-left-color: var(--workout-bd); color: var(--workout-fg); }
-    .event.type-meal    { background-color: var(--meal-bg);    border-left-color: var(--meal-bd);    color: var(--meal-fg); }
-    .event.type-fast    { background-color: var(--fast-bg);    border-left-color: var(--fast-bd);    color: var(--fast-fg); }
-    .event.type-supp    { background-color: var(--supp-bg);    border-left-color: var(--supp-bd);    color: var(--supp-fg); }
-    .event.type-dessert { background-color: var(--dessert-bg); border-left-color: var(--dessert-bd); color: var(--dessert-fg); }
+    .event.type-workout {
+      background-color: var(--workout-bg);
+      border-left-color: var(--workout-bd);
+      color: var(--workout-fg);
+    }
+
+    .event.type-meal {
+      background-color: var(--meal-bg);
+      border-left-color: var(--meal-bd);
+      color: var(--meal-fg);
+    }
+
+    .event.type-fast {
+      background-color: var(--fast-bg);
+      border-left-color: var(--fast-bd);
+      color: var(--fast-fg);
+    }
+
+    .event.type-supp {
+      background-color: var(--supp-bg);
+      border-left-color: var(--supp-bd);
+      color: var(--supp-fg);
+    }
+
+    .event.type-dessert {
+      background-color: var(--dessert-bg);
+      border-left-color: var(--dessert-bd);
+      color: var(--dessert-fg);
+    }
 
     .event-title {
       font-size: 0.72rem;
@@ -302,9 +351,9 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.25);
-      -webkit-backdrop-filter: blur(8px);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.08);
+      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      backdrop-filter: blur(24px) saturate(150%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -312,7 +361,9 @@
       z-index: 100;
     }
 
-    .modal-backdrop.hidden { display: none; }
+    .modal-backdrop.hidden {
+      display: none;
+    }
 
     .modal {
       background: var(--card-bg);
@@ -323,6 +374,8 @@
       padding: 14px 14px 12px;
       width: 100%;
       max-width: 360px;
+      max-height: 85vh;
+      overflow-y: auto;
       box-shadow: var(--shadow-modal);
     }
 
@@ -357,17 +410,61 @@
       letter-spacing: 0.3px;
     }
 
-    .tag.fast    { background-color: var(--fast-bg);    color: var(--fast-fg); }
-    .tag.supp    { background-color: var(--supp-bg);    color: var(--supp-fg); }
-    .tag.workout { background-color: var(--workout-bg); color: var(--workout-fg); }
-    .tag.meal    { background-color: var(--meal-bg);    color: var(--meal-fg); }
-    .tag.dessert { background-color: var(--dessert-bg); color: var(--dessert-fg); }
+    .tag.fast {
+      background-color: var(--fast-bg);
+      color: var(--fast-fg);
+    }
+
+    .tag.supp {
+      background-color: var(--supp-bg);
+      color: var(--supp-fg);
+    }
+
+    .tag.workout {
+      background-color: var(--workout-bg);
+      color: var(--workout-fg);
+    }
+
+    .tag.meal {
+      background-color: var(--meal-bg);
+      color: var(--meal-fg);
+    }
+
+    .tag.dessert {
+      background-color: var(--dessert-bg);
+      color: var(--dessert-fg);
+    }
 
     .modal-details {
       font-size: 0.85rem;
       color: var(--text-main);
-      line-height: 1.4;
+      line-height: 1.45;
       margin-bottom: 12px;
+    }
+
+    .modal-details p {
+      margin: 0 0 8px;
+    }
+
+    .modal-details p:last-child {
+      margin-bottom: 0;
+    }
+
+    .modal-details ul {
+      padding-left: 18px;
+      margin: 0 0 8px;
+    }
+
+    .modal-details ul ul {
+      margin: 4px 0 4px;
+    }
+
+    .modal-details li {
+      margin-bottom: 3px;
+    }
+
+    .modal-details strong {
+      font-weight: 500;
     }
 
     .modal-close {
@@ -387,33 +484,41 @@
 <body>
 
   <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">
-    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    </svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4" />
+      <path
+        d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+    </svg>
   </button>
 
   <header>
     <h1>Daily Routine</h1>
   </header>
 
-  <div class="toggles">
-    <div class="toggle" id="day-toggle" data-key="currentDay">
-      <div class="toggle-option active" data-value="wk"><span class="toggle-emoji">💼</span>Weekday</div>
-      <div class="toggle-option" data-value="wkend"><span class="toggle-emoji">🏖️</span>Weekend</div>
-    </div>
-    <div class="toggle" id="mode-toggle" data-key="currentMode">
-      <div class="toggle-option active" data-value="workout"><span class="toggle-emoji">🚴</span>Workout</div>
-      <div class="toggle-option" data-value="rest"><span class="toggle-emoji">😴</span>Rest</div>
-    </div>
+  <div class="toggle" id="view-toggle">
+    <div class="toggle-option" data-value="rest"><span class="toggle-emoji">😴</span>Rest</div>
+    <div class="toggle-option active" data-value="wk-workout"><span class="toggle-emoji">🚴</span>Weekday</div>
+    <div class="toggle-option" data-value="wkend-workout"><span class="toggle-emoji">🚴</span>Weekend</div>
   </div>
 
   <div class="calendar">
     <div id="timeline" class="timeline"></div>
     <div class="legend">
-      <span class="legend-item"><span class="legend-swatch" style="background:var(--fast-bg);border-color:var(--fast-bd)"></span>Fast</span>
-      <span class="legend-item"><span class="legend-swatch" style="background:var(--meal-bg);border-color:var(--meal-bd)"></span>Meal</span>
-      <span class="legend-item"><span class="legend-swatch" style="background:var(--workout-bg);border-color:var(--workout-bd)"></span>Workout</span>
-      <span class="legend-item"><span class="legend-swatch" style="background:var(--supp-bg);border-color:var(--supp-bd)"></span>Supp</span>
-      <span class="legend-item"><span class="legend-swatch" style="background:var(--dessert-bg);border-color:var(--dessert-bd)"></span>Dessert</span>
+      <span class="legend-item"><span class="legend-swatch"
+          style="background:var(--fast-bg);border-color:var(--fast-bd)"></span>Fast</span>
+      <span class="legend-item"><span class="legend-swatch"
+          style="background:var(--meal-bg);border-color:var(--meal-bd)"></span>Meal</span>
+      <span class="legend-item"><span class="legend-swatch"
+          style="background:var(--workout-bg);border-color:var(--workout-bd)"></span>Workout</span>
+      <span class="legend-item"><span class="legend-swatch"
+          style="background:var(--supp-bg);border-color:var(--supp-bd)"></span>Supp</span>
+      <span class="legend-item"><span class="legend-swatch"
+          style="background:var(--dessert-bg);border-color:var(--dessert-bd)"></span>Dessert</span>
     </div>
   </div>
 
@@ -430,36 +535,160 @@
   <script>
     const schedules = {
       'wk-workout': [
-        { time: '7:00 AM - 12:00 PM', title: 'Fasted Focus Window', tags: ['fast'], details: 'Black coffee, green tea, or water only. Peak cognitive window via norepinephrine & BDNF.' },
-        { time: '12:00 PM', title: 'Lunch & Foundation Stack', tags: ['meal', 'supp', 'dessert'], details: 'High protein + healthy fats (e.g., salmon/chicken salad with avocado). TAKE: Kirkland Multi + Kirkland Calcium/Zinc + Triple Action Joint. Ideal window for any sweets.' },
-        { time: '1:00 PM - 6:00 PM', title: 'Afternoon Work Window', tags: [], details: 'Steady baseline focus. Flat blood sugar prevents regular post-lunch energy crashes.' },
-        { time: '6:00 PM', title: 'Dinner', tags: ['meal'], details: 'Lean protein, fiber, complex carbs (e.g., beef stir fry with immunity-boosting shiitake mushrooms).' },
-        { time: '8:00 PM - 9:00 PM', title: 'Indoor Night Ride (Zone 2)', tags: ['workout'], details: '45-60 min steady spin. Manually triggers GLUT4 paths to clear blood sugar without requiring insulin.' },
-        { time: '9:00 PM', title: 'Sleep Preparation', tags: ['supp'], details: 'Cool down shower. TAKE: Nature\'s Bounty Magnesium Glycinate to drop core temp & ease muscles.' },
-        { time: '8:00 PM', title: 'Fast Begins', tags: ['fast'], details: 'Eating window closes. Sets up the overnight fast through to next-day lunch.' }
+        { time: '7:00 AM - 12:00 PM', title: 'Fasted Focus Window', tags: ['fast'], details: `
+          <p><strong>Window:</strong> Clean fast through to lunch.</p>
+          <p><strong>Allowed:</strong></p>
+          <ul>
+            <li>Black coffee</li>
+            <li>Green tea</li>
+            <li>Water (still or sparkling)</li>
+          </ul>
+          <p><strong>Why:</strong> Peak cognitive window driven by elevated norepinephrine and BDNF.</p>
+        ` },
+        { time: '12:00 PM', title: 'Lunch & Foundation Stack', tags: ['meal', 'supp', 'dessert'], details: `
+          <p><strong>Meal:</strong> High protein + healthy fats. E.g., salmon or chicken salad with avocado.</p>
+          <p><strong>Take:</strong></p>
+          <ul>
+            <li>Kirkland Multi</li>
+            <li>Kirkland Calcium/Zinc</li>
+            <li>Triple Action Joint</li>
+          </ul>
+          <p><strong>Window:</strong> Ideal slot for any sweets — insulin response is already in motion.</p>
+        ` },
+        { time: '1:00 PM - 6:00 PM', title: 'Afternoon Work Window', tags: [], details: `
+          <p><strong>Mode:</strong> Steady baseline focus.</p>
+          <p><strong>Why:</strong> Flat blood sugar prevents the typical post-lunch energy crash.</p>
+        ` },
+        { time: '6:00 PM', title: 'Dinner', tags: ['meal'], details: `
+          <p><strong>Meal:</strong> Lean protein, fiber, complex carbs.</p>
+          <p><strong>Example:</strong> Beef stir fry with shiitake mushrooms (immune support).</p>
+        ` },
+        { time: '8:00 PM', title: 'Fast Begins', tags: ['fast'], details: `
+          <p><strong>Action:</strong> Eating window closes.</p>
+          <p><strong>Why:</strong> Sets up the overnight fast through to next-day lunch.</p>
+        ` },
+        { time: '8:00 PM - 9:00 PM', title: 'Indoor Night Ride (Zone 2)', tags: ['workout'], details: `
+          <p><strong>Session:</strong> 45–60 min steady spin.</p>
+          <p><strong>Why:</strong> Manually triggers GLUT4 pathways to clear blood sugar without requiring insulin.</p>
+        ` },
+        { time: '9:00 PM', title: 'Sleep Preparation', tags: ['supp'], details: `
+          <p><strong>Routine:</strong> Cool-down shower.</p>
+          <p><strong>Take:</strong></p>
+          <ul>
+            <li>Nature&rsquo;s Bounty Magnesium Glycinate</li>
+          </ul>
+          <p><strong>Why:</strong> Drops core temperature, eases muscles into recovery.</p>
+        ` }
       ],
-      'wk-rest': [
-        { time: '7:00 AM - 12:00 PM', title: 'Fasted Focus Window', tags: ['fast'], details: 'Clean fast. Deep systemic rest allowing pancreas baseline insulin recovery.' },
-        { time: '12:00 PM', title: 'Lunch & Core Stack', tags: ['meal', 'supp', 'dessert'], details: 'Nutrient-dense pairing for fat-soluble vitamins. TAKE: Kirkland Multi + Kirkland Calcium/Zinc + Triple Action Joint. Dessert window open here.' },
-        { time: '6:00 PM', title: 'Dinner', tags: ['meal'], details: 'Keep it clean and light. Grilled chicken breast with roasted asparagus or fresh spinach.' },
-        { time: '8:00 PM', title: 'Fast Begins', tags: ['fast'], details: 'Lock the kitchen down completely. Initiates the 16-hour fasting reset.' },
-        { time: '9:00 PM', title: 'Sleep Preparation', tags: ['supp'], details: 'Dim ambient lights. TAKE: Nature\'s Bounty Magnesium Glycinate to trigger alpha brain waves.' }
+      'rest': [
+        { time: '7:00 AM - 12:00 PM', title: 'Fasted Focus Window', tags: ['fast'], details: `
+          <p><strong>Window:</strong> Clean fast through to lunch.</p>
+          <p><strong>Why:</strong> Deep systemic rest allowing pancreas baseline insulin recovery.</p>
+        ` },
+        { time: '12:00 PM', title: 'Lunch & Core Stack', tags: ['meal', 'supp', 'dessert'], details: `
+          <p><strong>Meal:</strong> Nutrient-dense pairing to drive fat-soluble vitamin absorption.</p>
+          <p><strong>Take:</strong></p>
+          <ul>
+            <li>Kirkland Multi</li>
+            <li>Kirkland Calcium/Zinc</li>
+            <li>Triple Action Joint</li>
+          </ul>
+          <p><strong>Window:</strong> Dessert window open here.</p>
+        ` },
+        { time: '6:00 PM', title: 'Dinner', tags: ['meal'], details: `
+          <p><strong>Meal:</strong> Clean and light.</p>
+          <p><strong>Example:</strong> Grilled chicken breast with roasted asparagus or fresh spinach.</p>
+        ` },
+        { time: '8:00 PM', title: 'Fast Begins', tags: ['fast'], details: `
+          <p><strong>Action:</strong> Lock the kitchen down completely.</p>
+          <p><strong>Why:</strong> Initiates the 16-hour fasting reset.</p>
+        ` },
+        { time: '9:00 PM', title: 'Sleep Preparation', tags: ['supp'], details: `
+          <p><strong>Routine:</strong> Dim ambient lights.</p>
+          <p><strong>Take:</strong></p>
+          <ul>
+            <li>Nature&rsquo;s Bounty Magnesium Glycinate</li>
+          </ul>
+          <p><strong>Why:</strong> Triggers alpha brain waves for sleep onset.</p>
+        ` }
       ],
       'wkend-workout': [
-        { time: '7:00 AM', title: 'Pre-Ride Functional Fueling', tags: ['meal'], details: 'Small carb snack (e.g., banana with almond butter or sourdough). Protects structural lean muscle mass.' },
-        { time: '8:00 AM - 10:30 AM', title: 'Outdoor Road/Gravel Ride', tags: ['workout'], details: 'Cardio performance window. Leg contractions cleanly extract glucose straight from blood.' },
-        { time: '12:00 PM', title: 'Post-Ride Recovery Lunch', tags: ['meal', 'supp', 'dessert'], details: 'Substantial loading meal (e.g., eggs, turkey bacon, whole grain toast). TAKE: Kirkland Multi + Kirkland Calcium/Zinc + Triple Action Joint. Excellent window for dessert reward.' },
-        { time: '6:00 PM', title: 'Dinner', tags: ['meal'], details: 'Balanced menu with whole foods. Focus on antioxidants to manage joint inflammation.' },
-        { time: '8:00 PM', title: 'Fast Begins', tags: ['fast'], details: 'Kitchen closed. Early fast setup ensures high morning clarity for Sunday.' },
-        { time: '9:00 PM', title: 'Sleep Preparation', tags: ['supp'], details: 'TAKE: Nature\'s Bounty Magnesium Glycinate to assist muscle tissue recovery and prevent cramping.' }
+        {
+          time: '7:00 AM - 7:30 AM', title: 'Pre-Ride Fuel', tags: ['meal'], details: `
+          <p><strong>When:</strong> Eat 30–60 minutes before rolling out.</p>
+          <p><strong>Base recipe:</strong></p>
+          <ul>
+            <li>1/4 cup dry rolled oats</li>
+            <li>1 tbsp peanut butter (or almond butter)</li>
+            <li>A splash of whole milk (or unsweetened almond/soy milk)</li>
+          </ul>
+          <p><strong>Fruit variants (choose one):</strong></p>
+          <ul>
+            <li><strong>Banana (default):</strong> 1/4 of a large banana, sliced or mashed</li>
+            <li><strong>Apple/pear:</strong> 1/4 of a medium apple or pear, finely diced or grated</li>
+            <li><strong>Berries:</strong> ~1/4 cup fresh blueberries, blackberries, or raspberries</li>
+            <li><strong>Applesauce:</strong> 2 tbsp unsweetened ("no added sugar") applesauce</li>
+          </ul>
+          <p><strong>Instructions:</strong> Mix base + chosen fruit the night before. If using applesauce or low-fat milk variants, the 1 tbsp nut butter is mandatory to anchor digestion and prevent a glucose spike.</p>
+        ` },
+        {
+          time: '7:30 AM - 9:30 AM', title: 'Outdoor Climbing Ride', tags: ['workout'], details: `
+          <p><strong>On-bike hydration: home-brewed sports drink.</strong> Small sips every 10–15 min during the ride.</p>
+          <p><strong>Base (per 20–24 oz bottle):</strong></p>
+          <ul>
+            <li>1/8 to 1/4 tsp fine salt (replaces lost sodium)</li>
+            <li>1–2 tbsp real lemon juice (adds potassium, cuts sweetness)</li>
+            <li>Cold water and ice</li>
+          </ul>
+          <p><strong>Intensity variants:</strong></p>
+          <ul>
+            <li><strong>Climbing / over 60 min:</strong> Add 2 tbsp white table sugar (~24–28g carbs). Working leg muscles vacuum it up to conquer steep grades without triggering an insulin spike.</li>
+            <li><strong>Flat Zone 2 / under 60 min:</strong> Zero sugar. Water + salt + lemon only — preserves the morning fast and maximizes fat-burning.</li>
+          </ul>
+        ` },
+        {
+          time: '9:30 AM - 10:00 AM', title: 'Post-Ride Recovery Bridge', tags: ['meal'], details: `
+          <p><strong>When:</strong> Eat within 30 min of stepping off the bike. Restocks muscle glycogen and halts breakdown while keeping lunch on time at 12:00 PM.</p>
+          <p><strong>Protein + fruit pairings (choose one):</strong></p>
+          <ul>
+            <li><strong>Yogurt:</strong> Small bowl of plain unsweetened Greek yogurt with a handful of fresh berries.</li>
+            <li><strong>Whole food:</strong> 1 hard-boiled egg + half a fresh apple or pear.</li>
+            <li><strong>Nut & dried fruit:</strong> Handful of plain cashews + one of:
+              <ul>
+                <li>2–3 dried apricots or prunes (low GI, excellent fiber)</li>
+                <li>1–1.5 tbsp raisins (quick potassium + glycogen recharge)</li>
+                <li>1 large or 2 small dried figs (seed fiber slows absorption)</li>
+                <li>1 small strip dried mango (limit to 1 — higher natural sugar)</li>
+              </ul>
+            </li>
+          </ul>
+        ` },
+        { time: '12:00 PM', title: 'Post-Ride Recovery Lunch', tags: ['meal', 'supp', 'dessert'], details: `
+          <p><strong>Meal:</strong> Substantial loading meal. E.g., eggs, turkey bacon, whole grain toast.</p>
+          <p><strong>Take:</strong></p>
+          <ul>
+            <li>Kirkland Multi</li>
+            <li>Kirkland Calcium/Zinc</li>
+            <li>Triple Action Joint</li>
+          </ul>
+          <p><strong>Window:</strong> Excellent slot for a dessert reward.</p>
+        ` },
+        { time: '6:00 PM', title: 'Dinner', tags: ['meal'], details: `
+          <p><strong>Meal:</strong> Balanced whole foods.</p>
+          <p><strong>Focus:</strong> Antioxidants to manage post-ride joint inflammation.</p>
+        ` },
+        { time: '8:00 PM', title: 'Fast Begins', tags: ['fast'], details: `
+          <p><strong>Action:</strong> Kitchen closed.</p>
+          <p><strong>Why:</strong> Early fast setup ensures high morning clarity for Sunday.</p>
+        ` },
+        { time: '9:00 PM', title: 'Sleep Preparation', tags: ['supp'], details: `
+          <p><strong>Take:</strong></p>
+          <ul>
+            <li>Nature&rsquo;s Bounty Magnesium Glycinate</li>
+          </ul>
+          <p><strong>Why:</strong> Assists muscle tissue recovery and prevents cramping.</p>
+        ` }
       ],
-      'wkend-rest': [
-        { time: '7:00 AM - 12:00 PM', title: 'Fasted Focus Window', tags: ['fast'], details: 'Relaxed morning window. Black coffee or tea allowed. Maximizing structural autophagy.' },
-        { time: '12:00 PM', title: 'Family Lunch & Supps', tags: ['meal', 'supp', 'dessert'], details: 'Balanced lunch with lean proteins. TAKE: Kirkland Multi + Kirkland Calcium/Zinc + Triple Action Joint. Control sweets right after lunch.' },
-        { time: '6:00 PM', title: 'Dinner', tags: ['meal'], details: 'Final weekend fueling. Whole foods emphasis to limit system inflammation markers.' },
-        { time: '8:00 PM', title: 'Fast Begins', tags: ['fast'], details: 'Eating window complete. Sets clean insulin parameters ahead of the standard Monday work week.' },
-        { time: '9:00 PM', title: 'Sleep Preparation', tags: ['supp'], details: 'Calm the central nervous system down. TAKE: Nature\'s Bounty Magnesium Glycinate.' }
-      ]
     };
 
     const TIMELINE_START = 7;   // 7am
@@ -468,8 +697,7 @@
     const DEFAULT_DURATION = 0.75; // 45 min for single-time events
     const TYPE_PRIORITY = ['workout', 'meal', 'fast', 'supp', 'dessert'];
 
-    let currentDay = 'wk';
-    let currentMode = 'workout';
+    let currentView = 'wk-workout';
 
     function parseSingleTime(str) {
       const m = str.trim().match(/(\d+)(?::(\d+))?\s*(AM|PM)/i);
@@ -536,7 +764,7 @@
     }
 
     function render() {
-      const tabId = `${currentDay}-${currentMode}`;
+      const tabId = currentView;
       const timeline = document.getElementById('timeline');
       timeline.innerHTML = '';
 
@@ -619,7 +847,7 @@
       modal.querySelector('.modal-title').textContent = ev.title;
       const tagsEl = modal.querySelector('.modal-tags');
       tagsEl.innerHTML = ev.tags.map(t => `<span class="tag ${t}">${t}</span>`).join('');
-      modal.querySelector('.modal-details').textContent = ev.details;
+      modal.querySelector('.modal-details').innerHTML = ev.details;
       modal.classList.remove('hidden');
     }
 
@@ -632,23 +860,41 @@
     });
     document.querySelector('.modal-close').addEventListener('click', closeModal);
 
+    // Map between schedule keys and URL hash slugs (clean, shareable URLs)
+    const VIEW_TO_HASH = { 'rest': 'rest', 'wk-workout': 'weekday', 'wkend-workout': 'weekend' };
+    const HASH_TO_VIEW = { 'rest': 'rest', 'weekday': 'wk-workout', 'weekend': 'wkend-workout' };
+
+    function applyView(view, opts) {
+      if (!schedules[view]) return;
+      currentView = view;
+      document.querySelectorAll('#view-toggle .toggle-option').forEach(o => {
+        o.classList.toggle('active', o.dataset.value === view);
+      });
+      const targetHash = '#' + VIEW_TO_HASH[view];
+      if (!opts || !opts.skipHash) {
+        if (location.hash !== targetHash) {
+          history.replaceState(null, '', targetHash);
+        }
+      }
+      render();
+    }
+
     document.querySelectorAll('.toggle').forEach(toggle => {
       toggle.addEventListener('click', (e) => {
         const clickedOption = e.target.closest('.toggle-option');
         if (!clickedOption || clickedOption.classList.contains('active')) return;
-
-        const options = toggle.querySelectorAll('.toggle-option');
-        options.forEach(o => o.classList.remove('active'));
-        clickedOption.classList.add('active');
-
-        const value = clickedOption.dataset.value;
-        if (toggle.id === 'day-toggle') currentDay = value;
-        else if (toggle.id === 'mode-toggle') currentMode = value;
-        render();
+        applyView(clickedOption.dataset.value);
       });
     });
 
-    render();
+    window.addEventListener('hashchange', () => {
+      const view = HASH_TO_VIEW[location.hash.slice(1)];
+      if (view) applyView(view, { skipHash: true });
+    });
+
+    // Initial view: hash if valid, else the default already set on currentView
+    const initialView = HASH_TO_VIEW[location.hash.slice(1)] || currentView;
+    applyView(initialView);
 
     (function () {
       var root = document.documentElement;
