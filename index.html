@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Daily Routine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #f5f5f7;
+      --card-bg: #ffffff;
+      --border: #e4e4e7;
+      --grid-line: #ececef;
+      --text-main: #18181b;
+      --text-muted: #6b7280;
+      --accent-blue: #2563eb;
+
+      --workout-bg: #fef3c7;
+      --workout-bd: #f59e0b;
+      --workout-fg: #92400e;
+      --meal-bg: #d1fae5;
+      --meal-bd: #10b981;
+      --meal-fg: #065f46;
+      --fast-bg: #fee2e2;
+      --fast-bd: #ef4444;
+      --fast-fg: #991b1b;
+      --supp-bg: #ede9fe;
+      --supp-bd: #8b5cf6;
+      --supp-fg: #5b21b6;
+      --dessert-bg: #fce7f3;
+      --dessert-bd: #ec4899;
+      --dessert-fg: #9d174d;
+      --neutral-bg: #f3f4f6;
+      --neutral-bd: #9ca3af;
+      --neutral-fg: #4b5563;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-weight: 300;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      padding: 8px 10px 12px;
+      font-weight: 300;
+    }
+
+    header {
+      text-align: center;
+      padding: 14px 0 10px;
+      margin-bottom: 6px;
+    }
+
+    header h1 {
+      font-size: 1.05rem;
+      font-weight: 400;
+      letter-spacing: -0.3px;
+    }
+
+    .toggles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 6px 0 18px;
+    }
+
+    .toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .toggle-option {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 12px 4px;
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .toggle-option.active {
+      background-color: var(--accent-blue);
+      color: #ffffff;
+    }
+
+    .toggle-emoji {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    /* Calendar timeline */
+    .calendar {
+      position: relative;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 8px 8px 8px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .timeline {
+      position: relative;
+      /* height set dynamically */
+    }
+
+    .hour-row {
+      position: absolute;
+      left: 50px;
+      right: 0;
+      border-top: 1px solid var(--grid-line);
+    }
+
+    .hour-label {
+      position: absolute;
+      left: 0;
+      width: 44px;
+      text-align: right;
+      font-size: 0.65rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      padding-right: 4px;
+      transform: translateY(-50%);
+      background: var(--card-bg);
+      letter-spacing: 0.2px;
+    }
+
+    .event-area {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50px;
+      right: 0;
+      /* hour labels sit in the 50px left rail */
+    }
+
+    .event {
+      position: absolute;
+      background-color: var(--neutral-bg);
+      border-left: 3px solid var(--neutral-bd);
+      color: var(--neutral-fg);
+      border-radius: 4px;
+      padding: 3px 6px;
+      overflow: hidden;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.03);
+    }
+
+    .event.type-workout { background-color: var(--workout-bg); border-left-color: var(--workout-bd); color: var(--workout-fg); }
+    .event.type-meal    { background-color: var(--meal-bg);    border-left-color: var(--meal-bd);    color: var(--meal-fg); }
+    .event.type-fast    { background-color: var(--fast-bg);    border-left-color: var(--fast-bd);    color: var(--fast-fg); }
+    .event.type-supp    { background-color: var(--supp-bg);    border-left-color: var(--supp-bd);    color: var(--supp-fg); }
+    .event.type-dessert { background-color: var(--dessert-bg); border-left-color: var(--dessert-bd); color: var(--dessert-fg); }
+
+    .event-title {
+      font-size: 0.72rem;
+      font-weight: 500;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .event-title.tag-label {
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      font-size: 0.65rem;
+    }
+
+    .event-time {
+      font-size: 0.6rem;
+      font-weight: 500;
+      opacity: 0.8;
+      line-height: 1.1;
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      margin-top: 10px;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      justify-content: center;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      border-left: 3px solid;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+
+    .modal-backdrop.hidden { display: none; }
+
+    .modal {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 14px 14px 12px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-time {
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      letter-spacing: 0.2px;
+    }
+
+    .modal-title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-main);
+      margin-top: 2px;
+      margin-bottom: 8px;
+    }
+
+    .modal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .tag {
+      font-size: 0.6rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 3px;
+      letter-spacing: 0.3px;
+    }
+
+    .tag.fast    { background-color: var(--fast-bg);    color: var(--fast-fg); }
+    .tag.supp    { background-color: var(--supp-bg);    color: var(--supp-fg); }
+    .tag.workout { background-color: var(--workout-bg); color: var(--workout-fg); }
+    .tag.meal    { background-color: var(--meal-bg);    color: var(--meal-fg); }
+    .tag.dessert { background-color: var(--dessert-bg); color: var(--dessert-fg); }
+
+    .modal-details {
+      font-size: 0.85rem;
+      color: var(--text-main);
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .modal-close {
+      width: 100%;
+      background: var(--accent-blue);
+      color: #fff;
+      border: none;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Daily Routine</h1>
+  </header>
+
+  <div class="toggles">
+    <div class="toggle" id="day-toggle" data-key="currentDay">
+      <div class="toggle-option active" data-value="wk"><span class="toggle-emoji">💼</span>Weekday</div>
+      <div class="toggle-option" data-value="wkend"><span class="toggle-emoji">🏖️</span>Weekend</div>
+    </div>
+    <div class="toggle" id="mode-toggle" data-key="currentMode">
+      <div class="toggle-option active" data-value="workout"><span class="toggle-emoji">🚴</span>Workout</div>
+      <div class="toggle-option" data-value="rest"><span class="toggle-emoji">😴</span>Rest</div>
+    </div>
+  </div>
+
+  <div class="calendar">
+    <div id="timeline" class="timeline"></div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-swatch" style="background:var(--fast-bg);border-color:var(--fast-bd)"></span>Fast</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:var(--meal-bg);border-color:var(--meal-bd)"></span>Meal</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:var(--workout-bg);border-color:var(--workout-bd)"></span>Workout</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:var(--supp-bg);border-color:var(--supp-bd)"></span>Supp</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:var(--dessert-bg);border-color:var(--dessert-bd)"></span>Dessert</span>
+    </div>
+  </div>
+
+  <div id="modal" class="modal-backdrop hidden">
+    <div class="modal">
+      <div class="modal-time"></div>
+      <div class="modal-title"></div>
+      <div class="modal-tags"></div>
+      <div class="modal-details"></div>
+      <button class="modal-close">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const schedules = {
+      'wk-workout': [
+        { time: '7:00 AM - 12:00 PM', title: 'Fasted Focus Window', tags: ['fast'], details: 'Black coffee, green tea, or water only. Peak cognitive window via norepinephrine & BDNF.' },
+        { time: '12:00 PM', title: 'Lunch & Foundation Stack', tags: ['meal', 'supp', 'dessert'], details: 'High protein + healthy fats (e.g., salmon/chicken salad with avocado). TAKE: Kirkland Multi + Kirkland Calcium/Zinc + Triple Action Joint. Ideal window for any sweets.' },
+        { time: '1:00 PM - 6:00 PM', title: 'Afternoon Work Window', tags: [], details: 'Steady baseline focus. Flat blood sugar prevents regular post-lunch energy crashes.' },
+        { time: '6:00 PM', title: 'Dinner', tags: ['meal'], details: 'Lean protein, fiber, complex carbs (e.g., beef stir fry with immunity-boosting shiitake mushrooms).' },
+        { time: '8:00 PM - 9:00 PM', title: 'Indoor Night Ride (Zone 2)', tags: ['workout'], details: '45-60 min steady spin. Manually triggers GLUT4 paths to clear blood sugar without requiring insulin.' },
+        { time: '9:00 PM', title: 'Sleep Preparation', tags: ['supp'], details: 'Cool down shower. TAKE: Nature\'s Bounty Magnesium Glycinate to drop core temp & ease muscles.' },
+        { time: '8:00 PM', title: 'Fast Begins', tags: ['fast'], details: 'Eating window closes. Sets up the overnight fast through to next-day lunch.' }
+      ],
+      'wk-rest': [
+        { time: '7:00 AM - 12:00 PM', title: 'Fasted Focus Window', tags: ['fast'], details: 'Clean fast. Deep systemic rest allowing pancreas baseline insulin recovery.' },
+        { time: '12:00 PM', title: 'Lunch & Core Stack', tags: ['meal', 'supp', 'dessert'], details: 'Nutrient-dense pairing for fat-soluble vitamins. TAKE: Kirkland Multi + Kirkland Calcium/Zinc + Triple Action Joint. Dessert window open here.' },
+        { time: '6:00 PM', title: 'Dinner', tags: ['meal'], details: 'Keep it clean and light. Grilled chicken breast with roasted asparagus or fresh spinach.' },
+        { time: '8:00 PM', title: 'Fast Begins', tags: ['fast'], details: 'Lock the kitchen down completely. Initiates the 16-hour fasting reset.' },
+        { time: '9:00 PM', title: 'Sleep Preparation', tags: ['supp'], details: 'Dim ambient lights. TAKE: Nature\'s Bounty Magnesium Glycinate to trigger alpha brain waves.' }
+      ],
+      'wkend-workout': [
+        { time: '7:00 AM', title: 'Pre-Ride Functional Fueling', tags: ['meal'], details: 'Small carb snack (e.g., banana with almond butter or sourdough). Protects structural lean muscle mass.' },
+        { time: '8:00 AM - 10:30 AM', title: 'Outdoor Road/Gravel Ride', tags: ['workout'], details: 'Cardio performance window. Leg contractions cleanly extract glucose straight from blood.' },
+        { time: '12:00 PM', title: 'Post-Ride Recovery Lunch', tags: ['meal', 'supp', 'dessert'], details: 'Substantial loading meal (e.g., eggs, turkey bacon, whole grain toast). TAKE: Kirkland Multi + Kirkland Calcium/Zinc + Triple Action Joint. Excellent window for dessert reward.' },
+        { time: '6:00 PM', title: 'Dinner', tags: ['meal'], details: 'Balanced menu with whole foods. Focus on antioxidants to manage joint inflammation.' },
+        { time: '8:00 PM', title: 'Fast Begins', tags: ['fast'], details: 'Kitchen closed. Early fast setup ensures high morning clarity for Sunday.' },
+        { time: '9:00 PM', title: 'Sleep Preparation', tags: ['supp'], details: 'TAKE: Nature\'s Bounty Magnesium Glycinate to assist muscle tissue recovery and prevent cramping.' }
+      ],
+      'wkend-rest': [
+        { time: '7:00 AM - 12:00 PM', title: 'Fasted Focus Window', tags: ['fast'], details: 'Relaxed morning window. Black coffee or tea allowed. Maximizing structural autophagy.' },
+        { time: '12:00 PM', title: 'Family Lunch & Supps', tags: ['meal', 'supp', 'dessert'], details: 'Balanced lunch with lean proteins. TAKE: Kirkland Multi + Kirkland Calcium/Zinc + Triple Action Joint. Control sweets right after lunch.' },
+        { time: '6:00 PM', title: 'Dinner', tags: ['meal'], details: 'Final weekend fueling. Whole foods emphasis to limit system inflammation markers.' },
+        { time: '8:00 PM', title: 'Fast Begins', tags: ['fast'], details: 'Eating window complete. Sets clean insulin parameters ahead of the standard Monday work week.' },
+        { time: '9:00 PM', title: 'Sleep Preparation', tags: ['supp'], details: 'Calm the central nervous system down. TAKE: Nature\'s Bounty Magnesium Glycinate.' }
+      ]
+    };
+
+    const TIMELINE_START = 7;   // 7am
+    const TIMELINE_END = 22.5;  // 10:30pm so 10pm events render fully
+    const HOUR_HEIGHT = 38;     // px per hour
+    const DEFAULT_DURATION = 0.75; // 45 min for single-time events
+    const TYPE_PRIORITY = ['workout', 'meal', 'fast', 'supp', 'dessert'];
+
+    let currentDay = 'wk';
+    let currentMode = 'workout';
+
+    function parseSingleTime(str) {
+      const m = str.trim().match(/(\d+)(?::(\d+))?\s*(AM|PM)/i);
+      let h = parseInt(m[1], 10);
+      const min = m[2] ? parseInt(m[2], 10) : 0;
+      const period = m[3].toUpperCase();
+      if (period === 'PM' && h !== 12) h += 12;
+      if (period === 'AM' && h === 12) h = 0;
+      return h + min / 60;
+    }
+
+    function parseTimeRange(str) {
+      const parts = str.split(/\s*-\s*/);
+      const start = parseSingleTime(parts[0]);
+      const end = parts[1] ? parseSingleTime(parts[1]) : start + DEFAULT_DURATION;
+      return { start, end };
+    }
+
+    function primaryType(tags) {
+      for (const t of TYPE_PRIORITY) if (tags.includes(t)) return t;
+      return null;
+    }
+
+    function formatHourLabel(h) {
+      const hr = h % 24;
+      const period = hr >= 12 ? 'PM' : 'AM';
+      const display = hr % 12 === 0 ? 12 : hr % 12;
+      return `${display} ${period}`;
+    }
+
+    function assignColumns(events) {
+      // Greedy column packing within overlap groups
+      events.sort((a, b) => a.start - b.start);
+      const placements = events.map(() => ({ col: 0, totalCols: 1 }));
+      let i = 0;
+      while (i < events.length) {
+        let groupEnd = events[i].end;
+        let j = i;
+        while (j + 1 < events.length && events[j + 1].start < groupEnd) {
+          j++;
+          groupEnd = Math.max(groupEnd, events[j].end);
+        }
+        const groupEvents = events.slice(i, j + 1);
+        const colsLastEnd = [];
+        for (let k = 0; k < groupEvents.length; k++) {
+          const ev = groupEvents[k];
+          let assigned = -1;
+          for (let c = 0; c < colsLastEnd.length; c++) {
+            if (colsLastEnd[c] <= ev.start) { assigned = c; break; }
+          }
+          if (assigned === -1) {
+            assigned = colsLastEnd.length;
+            colsLastEnd.push(ev.end);
+          } else {
+            colsLastEnd[assigned] = ev.end;
+          }
+          placements[i + k].col = assigned;
+        }
+        const total = colsLastEnd.length;
+        for (let k = 0; k < groupEvents.length; k++) placements[i + k].totalCols = total;
+        i = j + 1;
+      }
+      return placements;
+    }
+
+    function render() {
+      const tabId = `${currentDay}-${currentMode}`;
+      const timeline = document.getElementById('timeline');
+      timeline.innerHTML = '';
+
+      const totalHours = TIMELINE_END - TIMELINE_START;
+      const height = totalHours * HOUR_HEIGHT;
+      timeline.style.height = height + 'px';
+
+      // Hour grid lines + labels (show whole hours only)
+      for (let h = TIMELINE_START; h <= Math.floor(TIMELINE_END); h++) {
+        const top = (h - TIMELINE_START) * HOUR_HEIGHT;
+        const line = document.createElement('div');
+        line.className = 'hour-row';
+        line.style.top = top + 'px';
+        timeline.appendChild(line);
+
+        const label = document.createElement('div');
+        label.className = 'hour-label';
+        label.style.top = top + 'px';
+        label.textContent = formatHourLabel(h);
+        timeline.appendChild(label);
+      }
+
+      // Event layer
+      const area = document.createElement('div');
+      area.className = 'event-area';
+      timeline.appendChild(area);
+
+      // Parse events, extend single-time fasts to end of day, then explode multi-tag
+      // events into one sub-event per tag so they render side-by-side.
+      const raw = schedules[tabId];
+      const expanded = [];
+      raw.forEach(e => {
+        const { start, end: rawEnd } = parseTimeRange(e.time);
+        const hasRange = /-/.test(e.time);
+        const isOngoingFast = !hasRange && e.tags.includes('fast');
+        const end = isOngoingFast ? TIMELINE_END : rawEnd;
+        const tagList = e.tags.length ? e.tags : [null];
+        tagList.forEach(tag => {
+          expanded.push({
+            parent: e,
+            tag,
+            start: Math.max(start, TIMELINE_START),
+            end: Math.min(end, TIMELINE_END),
+            isMulti: e.tags.length > 1
+          });
+        });
+      });
+
+      const placements = assignColumns(expanded);
+
+      expanded.forEach((ev, idx) => {
+        const top = (ev.start - TIMELINE_START) * HOUR_HEIGHT;
+        const blockHeight = Math.max((ev.end - ev.start) * HOUR_HEIGHT - 2, 22);
+        const { col, totalCols } = placements[idx];
+        const widthPct = 100 / totalCols;
+        const leftPct = col * widthPct;
+
+        const block = document.createElement('div');
+        block.className = 'event' + (ev.tag ? ` type-${ev.tag}` : '');
+        block.style.top = top + 'px';
+        block.style.height = blockHeight + 'px';
+        block.style.left = `calc(${leftPct}% + 2px)`;
+        block.style.width = `calc(${widthPct}% - 4px)`;
+
+        const titleText = ev.isMulti ? ev.tag : ev.parent.title;
+        const titleClass = ev.isMulti ? 'event-title tag-label' : 'event-title';
+        const showTime = !ev.isMulti && blockHeight >= 28;
+        block.innerHTML = `
+          <div class="${titleClass}">${titleText}</div>
+          ${showTime ? `<div class="event-time">${ev.parent.time}</div>` : ''}
+        `;
+        block.addEventListener('click', () => openModal(ev.parent));
+        area.appendChild(block);
+      });
+    }
+
+    function openModal(ev) {
+      const modal = document.getElementById('modal');
+      modal.querySelector('.modal-time').textContent = ev.time;
+      modal.querySelector('.modal-title').textContent = ev.title;
+      const tagsEl = modal.querySelector('.modal-tags');
+      tagsEl.innerHTML = ev.tags.map(t => `<span class="tag ${t}">${t}</span>`).join('');
+      modal.querySelector('.modal-details').textContent = ev.details;
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target.id === 'modal') closeModal();
+    });
+    document.querySelector('.modal-close').addEventListener('click', closeModal);
+
+    document.querySelectorAll('.toggle').forEach(toggle => {
+      toggle.addEventListener('click', (e) => {
+        const clickedOption = e.target.closest('.toggle-option');
+        if (!clickedOption || clickedOption.classList.contains('active')) return;
+
+        const options = toggle.querySelectorAll('.toggle-option');
+        options.forEach(o => o.classList.remove('active'));
+        clickedOption.classList.add('active');
+
+        const value = clickedOption.dataset.value;
+        if (toggle.id === 'day-toggle') currentDay = value;
+        else if (toggle.id === 'mode-toggle') currentMode = value;
+        render();
+      });
+    });
+
+    render();
+  </script>
+</body>
+
+</html>
